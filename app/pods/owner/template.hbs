@@ -1,0 +1,21 @@
+<div class="row">
+    <h2 class="col-md-8">
+        Owners
+    </h2>
+
+    <div class="col-md-4">
+        {{#link-to 'owner.add' class='btn btn-xs btn-primary pull-right'}}
+            {{fa-icon 'plus'}}
+        {{/link-to}}
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        {{owner/owner-list owners=model}}
+    </div>
+    <div class="col-md-8">
+        {{outlet}}
+    </div>
+</div>

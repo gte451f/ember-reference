@@ -1,0 +1,7 @@
+<div class="list-group">
+    {{#each owners as |owner|}}
+        {{#link-to 'owner.item' owner.id class="list-group-item"}}
+            #{{owner.id}} - {{owner.fullName}}
+        {{/link-to}}
+    {{/each}}
+</div>

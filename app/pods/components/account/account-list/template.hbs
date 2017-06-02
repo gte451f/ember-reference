@@ -1,0 +1,7 @@
+<div class="list-group">
+    {{#each accounts as |account|}}
+        {{#link-to 'account.item' account.id class="list-group-item"}}
+            #{{account.id}} - {{account.name}}
+        {{/link-to}}
+    {{/each}}
+</div>
