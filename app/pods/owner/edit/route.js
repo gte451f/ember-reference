@@ -20,21 +20,42 @@ export default Ember.Route.extend({
      *
      */
     save: function (model) {
-      var self = this;
-      model.save().then(function () {
-        self.get('notify').success('Owner saved!');
-        self.transitionTo('owner.item', model.id);
-      }, function (reason) {
-        // Bubble up to global error handler
-        if (!Ember.isEmpty(reason.errors) && reason.errors[ 0 ].status === 422) {
-          // Expected rejection, inform user and swallow error
-          self.get('notify').alert('Email address already registered.');
+
+      model.validate().then(() => {
+        if (model.get("isValid")) {
+          model.save().then(() => {
+            this.transitionTo('owner.item', model.get('id'));
+          });
         } else {
-          // Bubble up to global error handler
-          // console.debug(reason);
-          throw reason;
+          self.get('notify').alert('Please correct validation errors before saving.');
         }
-      });
+      })
+
+      // var self = this;
+      // model.save().then(function () {
+      //   self.get('notify').success('Owner saved!');
+      //   self.transitionTo('owner.item', model.get('id'));
+      // }, function (reason) {
+      //   // Bubble up to global error handler
+      //   if (!Ember.isEmpty(reason.errors) && reason.errors[ 0 ].status === 422) {
+      //     // Expected rejection, inform user and swallow error
+      //     self.get('notify').alert('Email address already registered.');
+      //   } else {
+      //     // Bubble up to global error handler
+      //     // console.debug(reason);
+      //     throw reason;
+      //   }
+      // });
+    },
+
+    /**
+     * cancel form edit and roll back changes
+     * @param model
+     */
+    cancel: function (model) {
+      model.rollback();
+      this.transitionTo('owner.item', model.get('id'));
     }
+
   }
 });

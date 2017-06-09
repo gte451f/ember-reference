@@ -1,32 +1,61 @@
 <div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            {{owner.fullName}}
-        </h3>
-    </div>
-    <div class="panel-body">
-        {{#each owner.errors as |error|}}
-            <div class="error">
-                {{error.message}}
-            </div>
-        {{/each}}
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      {{owner.fullName}}
+    </h3>
+  </div>
+  <div class="panel-body">
+    {{#each owner.errors as |error|}}
+      <div class="error">
+        {{error.message}}
+      </div>
+    {{/each}}
 
-        <form>
-            <div class="form-group">
-                <label>First Name</label>
-                {{input value=owner.firstName type="text" class="form-control"}}
-            </div>
+    {{#each owner.errors as |errorSet|}}
+      {{#each errorSet.validation as |error|}}
+        {{#bs-alert type="warning"}}
+          <p>{{error}}</p>
+        {{/bs-alert}}
+      {{/each}}
+    {{/each}}
 
-            <div class="form-group">
-                <label>Last Name</label>
-                {{input value=owner.lastName type="text" class="form-control"}}
-            </div>
-            <div class="form-group">
-                <label>Email address</label>
-                {{input value=owner.email type="text" class="form-control"}}
-            </div>
-            <button class="btn btn-primary" {{action (route-action "save" owner)}} >Submit</button>
-            {{#link-to 'owner.item' owner class="btn btn-primary"}}Cancel{{/link-to}}
-        </form>
-    </div>
+    <form>
+      <div class="form-group">
+        <label>First Name</label>
+        {{input value=owner.firstName type="text" class="form-control"}}
+      </div>
+
+      <div class="form-group">
+        <label>Last Name</label>
+        {{input value=owner.lastName type="text" class="form-control"}}
+      </div>
+      <div class="form-group">
+        <label>Email address</label>
+        {{input value=owner.email type="text" class="form-control"}}
+      </div>
+
+      <div class="form-group">
+        <label>Gender</label>
+        {{#bs-button-group
+          value=owner.gender
+          type="radio"
+          class="btn-group-xs"
+          onChange=(action (mut owner.gender)) as |bg|}}
+          {{#bg.button value="Male" }}Male{{/bg.button}}
+          {{#bg.button value="Female"}}Female{{/bg.button}}
+          {{#bg.button value="Green"}}Green{{/bg.button}}
+        {{/bs-button-group}}
+      </div>
+
+      <button class="btn btn-primary" {{action (perform save owner)}}>
+        {{#if save.isRunning}}
+          {{fa-icon "spinner" spin=true}}
+        {{else}}
+          Submit
+        {{/if}}
+      </button>
+
+      <button class="btn btn-primary" {{action (route-action "cancel" owner)}} >Cancel</button>
+    </form>
+  </div>
 </div>
